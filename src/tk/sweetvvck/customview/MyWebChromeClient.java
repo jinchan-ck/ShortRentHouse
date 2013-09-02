@@ -1,5 +1,6 @@
 package tk.sweetvvck.customview;
 
+import tk.sweetvvck.shortrendhouse.activity.MainActivity;
 import android.content.Context;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -7,10 +8,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 public class MyWebChromeClient extends WebChromeClient {
+	
+	private Context context;
 	/**
 	 * @param context
 	 */
 	public MyWebChromeClient(Context context) {
+		this.context = context;
 	}
 
 	public final void onCloseWindow(WebView paramWebView) {
@@ -44,5 +48,7 @@ public class MyWebChromeClient extends WebChromeClient {
 
 	public final void onProgressChanged(WebView paramWebView, int paramInt) {
 		super.onProgressChanged(paramWebView, paramInt);
+		System.out.println("paramInt ______________________" + paramInt);
+		((MainActivity)context).houseListFragment.getProgressbar().setProgress(paramInt/100f);
 	}
 }

@@ -2,7 +2,7 @@ package tk.sweetvvck.shortrendhouse.activity;
 
 import tk.sweetvvck.customview.MyWebView;
 import tk.sweetvvck.shortrendhouse.R;
-import tk.sweetvvck.shortrendhouse.fragment.MailListFragment;
+import tk.sweetvvck.shortrendhouse.fragment.WubaHouseListFragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -11,13 +11,16 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends MenuActivity {
 
+	public WubaHouseListFragment houseListFragment;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		SlidingMenu sm = getSlidingMenu();
+		houseListFragment = (WubaHouseListFragment) WubaHouseListFragment.getInstance(sm);
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.main_layout, MailListFragment.getInstance(sm))
+				.replace(R.id.main_layout, houseListFragment)
 				.commit();
 		setSlidingActionBarEnabled(false);
 	}
@@ -33,7 +36,7 @@ public class MainActivity extends MenuActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
-			webview = ((MailListFragment) MailListFragment
+			webview = ((WubaHouseListFragment) WubaHouseListFragment
 					.getInstance(getSlidingMenu())).getmWebView();
 			if (webview != null && webview.canGoBack()) {
 				webview.goBack();

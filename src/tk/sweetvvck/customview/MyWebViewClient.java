@@ -1,5 +1,6 @@
 package tk.sweetvvck.customview;
 
+import tk.sweetvvck.shortrendhouse.activity.MainActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,12 +19,15 @@ public class MyWebViewClient extends WebViewClient {
 	public void onPageFinished(WebView view, String url) {
 		super.onPageFinished(view, url);
 		System.out.println("url---->" + url);
-
+		if(((MainActivity)context).houseListFragment.getProgressDialog() != null && ((MainActivity)context).houseListFragment.getProgressDialog().isShowing())
+			((MainActivity)context).houseListFragment.getProgressDialog().dismiss();
 	}
 
 	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
 		super.onPageStarted(view, url, favicon);
+		if(((MainActivity)context).houseListFragment.getProgressDialog() != null)
+			((MainActivity)context).houseListFragment.getProgressDialog().show();
 	}
 
 	@Override

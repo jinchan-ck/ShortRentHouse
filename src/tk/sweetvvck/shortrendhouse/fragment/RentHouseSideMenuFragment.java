@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-public class MailSideMenuFragment extends Fragment {
+public class RentHouseSideMenuFragment extends Fragment {
 
 	Context context;
 	LinearLayout layout = null;
@@ -41,11 +41,11 @@ public class MailSideMenuFragment extends Fragment {
 		this.sm = sm;
 	}
 
-	public MailSideMenuFragment() {
+	public RentHouseSideMenuFragment() {
 
 	}
 
-	public MailSideMenuFragment(SlidingMenu slidingMenu) {
+	public RentHouseSideMenuFragment(SlidingMenu slidingMenu) {
 		this.sm = slidingMenu;
 	}
 
@@ -112,15 +112,16 @@ public class MailSideMenuFragment extends Fragment {
 		MainActivity menu = (MainActivity) getActivity();
 		switch (position) {
 		case 0:
-			cur_fragment = MailListFragment.getInstance(sm);
+			cur_fragment = WubaHouseListFragment.getInstance(sm);
 			break;
 		case 1:
-//			cur_fragment = MailContactsFragment.getInstance(sm);
+			cur_fragment = GanjiHouseListFragment.getInstance(sm);
 
 			break;
 		}
 		FragmentTransaction ft = menu.getSupportFragmentManager()
 				.beginTransaction();
+		ft.replace(R.id.main_layout, cur_fragment);
 		ft.commit();
 		menu.getSlidingMenu().showContent();
 	}

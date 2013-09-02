@@ -9,8 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tk.sweetvvck.customview.MyWebView;
-import tk.sweetvvck.shortrendhouse.fragment.MailListFragment;
+import tk.sweetvvck.shortrendhouse.fragment.WubaHouseListFragment;
 import tk.sweetvvck.utils.WebTool;
+import android.content.Context;
 import android.webkit.JavascriptInterface;
 
 /**
@@ -19,11 +20,14 @@ import android.webkit.JavascriptInterface;
  */
 public class External {
 
+	@SuppressWarnings("unused")
+	private Context context;
+	
 	public External() {
 	}
 
 	public External(MyWebView webview) {
-
+		this.context = webview.getContext();
 	}
 
 	@JavascriptInterface
@@ -41,7 +45,7 @@ public class External {
 					url += "&refrom=wap";// 使用触屏版
 					String data = remove58(url);
 					/** 使用loaddatawithbaseurl解决中文乱码*/
-					((MailListFragment)MailListFragment.instance).getmWebView().loadDataWithBaseURL("",
+					((WubaHouseListFragment)WubaHouseListFragment.instance).getmWebView().loadDataWithBaseURL("",
 							data, "text/html", "utf-8", "");
 				}
 			}
@@ -61,13 +65,15 @@ public class External {
 		String data = WebTool.getDataFromUrl(url);
 		data = data
 				.replace("<head>",
-						"<head><style type=\"text/css\">.hidden{display: none;}</style>");// 添加隐藏样式
+						"<head><style type=\"text/css\">.hidden{display: none;} #hidden{display: none;}</style>");// 添加隐藏样式
 		data = data.replace("header", "hidden");
 		data = data.replace("footer", "hidden");
 		data = data.replace("fangico duanxin", "hidden");// 隐藏发送到手机功能
 		data = data.replace("btn_Favorite", "hidden");// 隐藏收藏功能
 		data = data.replace("fangico bangbang net-online", "hidden");// 隐藏在线聊天功能
-		data = data.replace("联系我时，请说是在58同城上看到的，谢谢！", "");
+		data = data.replace("banner_down", "hidden");
+		data = data.replace("adZhiNeng", "hidden");
+		data = data.replace("58同城", "<strong><font color=red>VV短租</font></strong>");
 		return data;
 	}
 }

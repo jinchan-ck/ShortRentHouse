@@ -1,7 +1,7 @@
 package tk.sweetvvck.shortrendhouse.activity;
 
 import tk.sweetvvck.shortrendhouse.R;
-import tk.sweetvvck.shortrendhouse.fragment.MailSideMenuFragment;
+import tk.sweetvvck.shortrendhouse.fragment.RentHouseSideMenuFragment;
 import android.os.Bundle;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -9,7 +9,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class MenuActivity extends SlidingFragmentActivity {
 
-	protected MailSideMenuFragment mFrag;
+	protected RentHouseSideMenuFragment mFrag;
 	public static int mCurrentFlag = 0;
 	
 	@Override
@@ -17,10 +17,10 @@ public class MenuActivity extends SlidingFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
-			mFrag = new MailSideMenuFragment(getSlidingMenu());
+			mFrag = new RentHouseSideMenuFragment(getSlidingMenu());
 			getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, mFrag).commit();
 		} else {
-			mFrag = (MailSideMenuFragment) this.getSupportFragmentManager()
+			mFrag = (RentHouseSideMenuFragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.menu_frame);
 			mFrag.setSm(getSlidingMenu());
 		}
