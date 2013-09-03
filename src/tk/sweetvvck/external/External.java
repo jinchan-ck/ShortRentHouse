@@ -43,15 +43,15 @@ public class External {
 					if (url.startsWith("http://i.webapp."))
 						url = url.replace("webapp", "m");// 调用58 m.58.com
 					url += "&refrom=wap";// 使用触屏版
-					String data = remove58(url);
-					/** 使用loaddatawithbaseurl解决中文乱码*/
-					((WubaHouseListFragment)WubaHouseListFragment.instance).getmWebView().loadDataWithBaseURL("",
-							data, "text/html", "utf-8", "");
+//					Intent intent = new Intent(context, HouseDetailActivity.class);
+//					intent.putExtra("url", url);
+//					context.startActivity(intent);
+//					String data = remove58(url);
+//					/** 使用loaddatawithbaseurl解决中文乱码*/
+					((WubaHouseListFragment)WubaHouseListFragment.instance).getmWebView().loadUrl(url);
 				}
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -61,7 +61,7 @@ public class External {
 	 * @return
 	 * @throws IOException
 	 */
-	private String remove58(String url) throws IOException {
+	public static String remove58(String url) throws IOException {
 		String data = WebTool.getDataFromUrl(url);
 		data = data
 				.replace("<head>",

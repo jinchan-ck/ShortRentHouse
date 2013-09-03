@@ -4,8 +4,10 @@
 package tk.sweetvvck.customview;
 
 import tk.sweetvvck.external.External;
+import tk.sweetvvck.shortrendhouse.activity.HouseDetailActivity;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
@@ -82,6 +84,13 @@ public class MyWebView extends WebView {
 	public void loadUrl(final String url) {
 		try {
 			Context c = this.getContext();
+			if(url.startsWith("http://i.m.")){
+				Intent intent = new Intent(c, HouseDetailActivity.class);
+				intent.putExtra("url", url);
+				intent.putExtra("channel", "wuba");
+				c.startActivity(intent);
+				return;
+			}
 			if (c instanceof Activity) {
 				((Activity) c).runOnUiThread(new Runnable() {
 					@Override

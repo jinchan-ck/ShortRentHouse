@@ -51,7 +51,6 @@ public class GanjiHouseListFragment extends Fragment {
 		View progressView = inflater.inflate(R.layout.progressbar, null);
 		progressbar = (HoloCircularProgressBar) progressView.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
-		progressDialog.show();
 		return rootView;
 	}
 
