@@ -4,6 +4,7 @@ SlidingMenu_library/bin/*
 SlidingMenu_library/gen/*
 
 SlidingMenu_library/bin/res/*
+ShortRendHouse/bin/res/*
 *.class
 *.dex
 *.apk
