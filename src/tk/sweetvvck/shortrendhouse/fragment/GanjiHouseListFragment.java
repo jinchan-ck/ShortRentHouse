@@ -1,5 +1,6 @@
 package tk.sweetvvck.shortrendhouse.fragment;
 
+import tk.sweetvvck.customview.LoadingCircleView;
 import tk.sweetvvck.customview.MyWebView;
 import tk.sweetvvck.shortrendhouse.R;
 import android.app.Activity;
@@ -11,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-
-import de.passsy.holocircularprogressbar.HoloCircularProgressBar;
 
 public class GanjiHouseListFragment extends Fragment {
 	public static Activity activity;
@@ -28,11 +27,11 @@ public class GanjiHouseListFragment extends Fragment {
 		return progressDialog;
 	}
 
-	public HoloCircularProgressBar getProgressbar() {
+	public LoadingCircleView getProgressbar() {
 		return progressbar;
 	}
 
-	private HoloCircularProgressBar progressbar;
+	private LoadingCircleView progressbar;
 
 	public MyWebView getmWebView() {
 		return mWebView;
@@ -49,7 +48,7 @@ public class GanjiHouseListFragment extends Fragment {
 		mWebView.loadUrl("http://www.3g.ganji.com/bj_fang10/");
 		progressDialog = new Dialog(activity, R.style.myDialogTheme);
 		View progressView = inflater.inflate(R.layout.progressbar, null);
-		progressbar = (HoloCircularProgressBar) progressView.findViewById(R.id.progress_bar);
+		progressbar = (LoadingCircleView) progressView.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
 		return rootView;
 	}

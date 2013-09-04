@@ -51,10 +51,10 @@ public class MyWebChromeClient extends WebChromeClient {
 		super.onProgressChanged(paramWebView, paramInt);
 		System.out.println("paramInt ______________________" + paramInt);
 		if(context instanceof MainActivity){
-			((MainActivity)context).houseListFragment.getProgressbar().setProgress(paramInt/100f);
+			((MainActivity)context).houseListFragment.getProgressbar().setProgress(paramInt);
 		} else if(context instanceof HouseDetailActivity){
 			if(((HouseDetailActivity)context).getProgressbar() != null){
-				((HouseDetailActivity)context).getProgressbar().setProgress(paramInt/100f);
+				((HouseDetailActivity)context).getProgressbar().setProgress(paramInt);
 			}
 		}
 	}

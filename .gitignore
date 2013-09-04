@@ -1,0 +1,10 @@
+SeedMail4Android_git/bin/*
+SeedMail4Android_git/gen/*
+SlidingMenu_library/bin/*
+SlidingMenu_library/gen/*
+
+SlidingMenu_library/bin/res/*
+*.class
+*.jar
+*.dex
+*.apk

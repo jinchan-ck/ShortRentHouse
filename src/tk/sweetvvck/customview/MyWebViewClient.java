@@ -33,17 +33,17 @@ public class MyWebViewClient extends WebViewClient {
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
 		super.onPageStarted(view, url, favicon);
 		if(context instanceof MainActivity){
-			if(((MainActivity)context).houseListFragment.getProgressDialog() != null)
+			if(((MainActivity)context).houseListFragment.getProgressDialog() != null && !((MainActivity)context).houseListFragment.getProgressDialog().isShowing())
 				((MainActivity)context).houseListFragment.getProgressDialog().show();
 		}else if(context instanceof HouseDetailActivity){
-			if(((HouseDetailActivity)context).getProgressDialog() != null)
+			if(((HouseDetailActivity)context).getProgressDialog() != null && !((HouseDetailActivity)context).getProgressDialog().isShowing())
 				((HouseDetailActivity)context).getProgressDialog().show();
 		}
 	}
 
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		if(url.contains("http://www.3g.ganji.com/bj_fang10/") && url.substring(url.indexOf("http://www.3g.ganji.com/bj_fang10/")).length() > 1){
+		if(url.contains("http://www.3g.ganji.com/bj_fang10/") && url.substring(url.indexOf("http://www.3g.ganji.com/bj_fang10/")).length() > 1 && !url.contains("www.3g.ganji.com/bj_fang10/?page=")){
 			Intent intent = new Intent(context, HouseDetailActivity.class);
 			intent.putExtra("url", url);
 			intent.putExtra("channel", "ganji");

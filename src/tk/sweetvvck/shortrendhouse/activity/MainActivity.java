@@ -2,6 +2,7 @@ package tk.sweetvvck.shortrendhouse.activity;
 
 import tk.sweetvvck.customview.MyWebView;
 import tk.sweetvvck.shortrendhouse.R;
+import tk.sweetvvck.shortrendhouse.fragment.GanjiHouseListFragment;
 import tk.sweetvvck.shortrendhouse.fragment.WubaHouseListFragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -36,7 +37,14 @@ public class MainActivity extends MenuActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			
 			webview = ((WubaHouseListFragment) WubaHouseListFragment
+					.getInstance(getSlidingMenu())).getmWebView();
+			if (webview != null && webview.canGoBack()) {
+				webview.goBack();
+				return true;
+			}
+			webview = ((GanjiHouseListFragment) GanjiHouseListFragment
 					.getInstance(getSlidingMenu())).getmWebView();
 			if (webview != null && webview.canGoBack()) {
 				webview.goBack();

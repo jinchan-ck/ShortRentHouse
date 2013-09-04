@@ -2,6 +2,7 @@ package tk.sweetvvck.shortrendhouse.activity;
 
 import java.io.IOException;
 
+import tk.sweetvvck.customview.LoadingCircleView;
 import tk.sweetvvck.customview.MyWebView;
 import tk.sweetvvck.external.External;
 import tk.sweetvvck.shortrendhouse.R;
@@ -18,8 +19,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
-import de.passsy.holocircularprogressbar.HoloCircularProgressBar;
-
 public class HouseDetailActivity extends SlidingFragmentActivity {
 
 	@SuppressWarnings("unused")
@@ -32,11 +31,11 @@ public class HouseDetailActivity extends SlidingFragmentActivity {
 		return progressDialog;
 	}
 
-	public HoloCircularProgressBar getProgressbar() {
+	public LoadingCircleView getProgressbar() {
 		return progressbar;
 	}
 
-	private HoloCircularProgressBar progressbar;
+	private LoadingCircleView progressbar;
 
 	public MyWebView getmWebView() {
 		return webview;
@@ -75,9 +74,10 @@ public class HouseDetailActivity extends SlidingFragmentActivity {
 		progressDialog = new Dialog(this, R.style.myDialogTheme);
 		View progressView = getLayoutInflater().inflate(R.layout.progressbar,
 				null);
-		progressbar = (HoloCircularProgressBar) progressView
+		progressbar = (LoadingCircleView) progressView
 				.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
+		progressDialog.show();
 		webview = (MyWebView) this.findViewById(R.id.house_list_webview);
 
 		Intent intent = getIntent();

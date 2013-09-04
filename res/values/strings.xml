@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ShortRendHouse</string>
+    <string name="app_name">V_V短租</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <color name="font_dark_blue">#515964</color>

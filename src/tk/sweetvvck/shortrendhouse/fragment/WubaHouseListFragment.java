@@ -1,5 +1,6 @@
 package tk.sweetvvck.shortrendhouse.fragment;
 
+import tk.sweetvvck.customview.LoadingCircleView;
 import tk.sweetvvck.customview.MyWebView;
 import tk.sweetvvck.shortrendhouse.R;
 import android.app.Activity;
@@ -11,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-
-import de.passsy.holocircularprogressbar.HoloCircularProgressBar;
 
 public class WubaHouseListFragment extends Fragment {
 	public static Activity activity;
@@ -28,11 +27,11 @@ public class WubaHouseListFragment extends Fragment {
 		return progressDialog;
 	}
 
-	public HoloCircularProgressBar getProgressbar() {
+	public LoadingCircleView getProgressbar() {
 		return progressbar;
 	}
 
-	private HoloCircularProgressBar progressbar;
+	private LoadingCircleView progressbar;
 
 	public MyWebView getmWebView() {
 		return mWebView;
@@ -49,7 +48,7 @@ public class WubaHouseListFragment extends Fragment {
 		mWebView.loadUrl("http://webapp.58.com/bj/duanzu/?formatsource=list_topcate&cversion=4.4.0.0&androidtype=centerhisfilter;os=android");
 		progressDialog = new Dialog(activity, R.style.myDialogTheme);
 		View progressView = inflater.inflate(R.layout.progressbar, null);
-		progressbar = (HoloCircularProgressBar) progressView.findViewById(R.id.progress_bar);
+		progressbar = (LoadingCircleView) progressView.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
 		return rootView;
 	}
