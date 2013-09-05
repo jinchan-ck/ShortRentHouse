@@ -1,18 +1,28 @@
 package tk.sweetvvck.shortrendhouse.fragment;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import tk.sweetvvck.constants.SocialConfig;
+import tk.sweetvvck.entity.SinaResp;
 import tk.sweetvvck.shortrendhouse.R;
 import tk.sweetvvck.shortrendhouse.activity.MainActivity;
+import tk.sweetvvck.utils.Utils;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -22,13 +32,40 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baidu.social.core.BaiduSocialException;
+import com.baidu.social.core.BaiduSocialListener;
+import com.baidu.social.core.Utility;
+import com.baidu.sociallogin.BaiduSocialLogin;
+import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class RentHouseSideMenuFragment extends Fragment {
 
-	Context context;
-	LinearLayout layout = null;
+	private Context context;
+	private LinearLayout layout = null;
 	private ListView menu_function;
+
+	private ImageView imgAvatar;
+	private TextView tvUsername;
+	
+	private Drawable avatarDrawable;
+
+	final Handler handler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0:
+				imgAvatar.setImageBitmap(Utils.getRoundRectBitmap(avatarDrawable, 5));
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	private BaiduSocialLogin socialLogin;
+
+	private final static String appKey = SocialConfig.mbApiKey;
 
 	public ListView getMenu_function() {
 		return menu_function;
@@ -51,6 +88,9 @@ public class RentHouseSideMenuFragment extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		context = container.getContext();
+		socialLogin = BaiduSocialLogin.getInstance(context, appKey);
+		socialLogin.supportWeiBoSso(SocialConfig.SINA_SSO_APP_KEY);
 		initViews(inflater, container);
 		return layout;
 	}
@@ -60,11 +100,89 @@ public class RentHouseSideMenuFragment extends Fragment {
 	 * @param container
 	 */
 	private void initViews(LayoutInflater inflater, ViewGroup container) {
-		context = container.getContext();
 		layout = (LinearLayout) inflater.inflate(R.layout.mail_menu, null);
 		menu_function = (ListView) layout.findViewById(R.id.menu_function);
 		menu_function.setAdapter(new FunctionAdapter(context));
+		imgAvatar = (ImageView) layout.findViewById(R.id.avatar);
+		tvUsername = (TextView) layout.findViewById(R.id.tv_username);
+		imgAvatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+
+				if (socialLogin
+						.isAccessTokenValid(Utility.SHARE_TYPE_SINA_WEIBO)) {
+					socialLogin.getUserInfoWithShareType(context,
+							Utility.SHARE_TYPE_SINA_WEIBO,
+							new UserInfoListener());
+				} else
+					socialLogin.authorize((Activity) context,
+							Utility.SHARE_TYPE_SINA_WEIBO,
+							new UserInfoListener());
+
+			}
+		});
 		initListener();
+	}
+
+	class UserInfoListener implements BaiduSocialListener {
+
+		@Override
+		public void onAuthComplete(Bundle values) {
+		}
+
+		@Override
+		public void onApiComplete(String responses) {
+			final String responseStr = responses;
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					String info = Utility.decodeUnicode(responseStr);
+					Gson json = new Gson();
+					final SinaResp resp = json.fromJson(info, SinaResp.class);
+					tvUsername.setText(resp.getUsername());
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							avatarDrawable = loadImageFromNetwork(resp.getHeadurl());
+							handler.sendEmptyMessage(0);
+						}
+					}).start();
+				}
+			});
+		}
+
+		@Override
+		public void onError(BaiduSocialException e) {
+//			final String error = e.toString();
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+				}
+			});
+		}
+	}
+
+	private Drawable loadImageFromNetwork(String imageUrl) {
+		
+		imageUrl = imageUrl.replace("/50/", "/180/");
+		
+		Drawable drawable = null;
+		try {
+			// 可以在这里通过文件名来判断，是否本地有此图片
+			drawable = Drawable.createFromStream(
+					new URL(imageUrl).openStream(), "image.jpg");
+		} catch (IOException e) {
+			Log.d("test", e.getMessage());
+		}
+		if (drawable == null) {
+			Log.d("test", "null drawable");
+		} else {
+			Log.d("test", "not null drawable");
+		}
+
+		return drawable;
 	}
 
 	/**
@@ -133,7 +251,7 @@ public class RentHouseSideMenuFragment extends Fragment {
 
 	class FunctionAdapter extends BaseAdapter {
 
-		String[] txts = { "五八同城", "赶集生活"};
+		String[] txts = { "五八同城", "赶集生活" };
 
 		int[] icons = { R.drawable.menu_uni, R.drawable.menu_con };
 		ViewHolder holder;

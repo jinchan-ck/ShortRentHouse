@@ -2,6 +2,9 @@
 <lint>
     <issue id="DrawAllocation" severity="ignore" />
     <issue id="HandlerLeak" severity="ignore" />
+    <issue id="NewApi">
+        <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\RentHouseSideMenuFragment.java" />
+    </issue>
     <issue id="SetJavaScriptEnabled" severity="ignore" />
     <issue id="ValidFragment" severity="ignore" />
 </lint>
