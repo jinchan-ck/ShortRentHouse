@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg" >
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/logo" />
+
+    <Button
+        android:clickable="true"
+        android:onClick="sinaLogin"
+        android:background="@drawable/abs__list_selector_background_transition_holo_light"
+        android:id="@+id/tv_sina"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:drawableLeft="@drawable/account_sina"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="新浪微博"
+        android:textSize="16sp" />
+    <Button
+        android:clickable="true"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/tv_sina"
+        android:id="@+id/tv_tencent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/abs__list_selector_background_transition_holo_dark"
+        android:drawableLeft="@drawable/account_tencent"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="10dp"
+        android:text="新浪微博"
+        android:textSize="16sp" />
+
+</RelativeLayout>

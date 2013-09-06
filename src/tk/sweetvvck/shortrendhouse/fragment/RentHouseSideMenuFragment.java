@@ -1,25 +1,29 @@
 package tk.sweetvvck.shortrendhouse.fragment;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.sweetvvck.constants.SocialConfig;
 import tk.sweetvvck.entity.SinaResp;
 import tk.sweetvvck.shortrendhouse.R;
+import tk.sweetvvck.shortrendhouse.activity.LoginActivity;
 import tk.sweetvvck.shortrendhouse.activity.MainActivity;
+import tk.sweetvvck.utils.AccessTokenKeeper;
+import tk.sweetvvck.utils.FileOptService;
+import tk.sweetvvck.utils.MySharedPreferences;
 import tk.sweetvvck.utils.Utils;
-import android.app.Activity;
+import tk.sweetvvck.utils.WebTool;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,40 +36,35 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.baidu.social.core.BaiduSocialException;
-import com.baidu.social.core.BaiduSocialListener;
-import com.baidu.social.core.Utility;
-import com.baidu.sociallogin.BaiduSocialLogin;
-import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.weibo.sdk.android.Oauth2AccessToken;
 
 public class RentHouseSideMenuFragment extends Fragment {
-
 	private Context context;
 	private LinearLayout layout = null;
 	private ListView menu_function;
 
+	public static Oauth2AccessToken accessToken;
+
 	private ImageView imgAvatar;
+
+	public ImageView getImgAvatar() {
+		return imgAvatar;
+	}
+
+	public void setImgAvatar(ImageView imgAvatar) {
+		this.imgAvatar = imgAvatar;
+	}
+
+	public TextView getTvUsername() {
+		return tvUsername;
+	}
+
+	public void setTvUsername(TextView tvUsername) {
+		this.tvUsername = tvUsername;
+	}
+
 	private TextView tvUsername;
-	
-	private Drawable avatarDrawable;
-
-	final Handler handler = new Handler(){
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 0:
-				imgAvatar.setImageBitmap(Utils.getRoundRectBitmap(avatarDrawable, 5));
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
-	private BaiduSocialLogin socialLogin;
-
-	private final static String appKey = SocialConfig.mbApiKey;
 
 	public ListView getMenu_function() {
 		return menu_function;
@@ -86,12 +85,88 @@ public class RentHouseSideMenuFragment extends Fragment {
 		this.sm = slidingMenu;
 	}
 
+	private Drawable avatarDrawable;
+
+	public Drawable getAvatarDrawable() {
+		return avatarDrawable;
+	}
+
+	public void setAvatarDrawable(Drawable avatarDrawable) {
+		this.avatarDrawable = avatarDrawable;
+	}
+
+	final Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0:
+				Bitmap bmp = Utils
+						.getRoundedCornerBitmap(((BitmapDrawable) avatarDrawable)
+								.getBitmap());
+				imgAvatar.setBackground(null);
+				imgAvatar.setImageBitmap(bmp);
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		context = container.getContext();
-		socialLogin = BaiduSocialLogin.getInstance(context, appKey);
-		socialLogin.supportWeiBoSso(SocialConfig.SINA_SSO_APP_KEY);
+		accessToken = AccessTokenKeeper.readAccessToken(context);
 		initViews(inflater, container);
+		if (accessToken.isSessionValid()) {
+			String date = new java.text.SimpleDateFormat("yyyy/MM/dd hh:mm:ss")
+					.format(new java.util.Date(accessToken.getExpiresTime()));
+			System.out.println(("access_token 仍在有效期内,无需再次登录: \naccess_token:"
+					+ accessToken.getToken() + "\n有效期：" + date));
+
+			final String avatarUrl = MySharedPreferences.get_String(
+					"avatarUrl", null);
+			String username = MySharedPreferences.get_String("username", "");
+			tvUsername.setText(username);
+			new Thread(new Runnable() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void run() {
+					if (avatarUrl != null) {
+						if (Utils.isNetworkConnected(context)) {
+							avatarDrawable = WebTool
+									.loadImageFromNetwork(avatarUrl);
+							if (avatarDrawable != null) {
+								try {
+									FileOptService.saveImage("avatar.jpg",
+											avatarDrawable);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						} else {
+							try {
+								avatarDrawable = new BitmapDrawable(
+										FileOptService.readImage("avatar.jpg"));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					} else {
+						avatarDrawable = getResources().getDrawable(
+								R.drawable.people_icon0);
+					}
+					if (avatarDrawable == null) {
+						avatarDrawable = getResources().getDrawable(
+								R.drawable.people_icon0);
+					}
+					handler.sendEmptyMessage(0);
+				}
+			}).start();
+
+		} else {
+			System.out.println(("使用SSO登录前，请检查手机上是否已经安装新浪微博客户端，"
+					+ "目前仅3.0.0及以上微博客户端版本支持SSO；如果未安装，将自动转为Oauth2.0进行认证"));
+		}
 		return layout;
 	}
 
@@ -105,84 +180,7 @@ public class RentHouseSideMenuFragment extends Fragment {
 		menu_function.setAdapter(new FunctionAdapter(context));
 		imgAvatar = (ImageView) layout.findViewById(R.id.avatar);
 		tvUsername = (TextView) layout.findViewById(R.id.tv_username);
-		imgAvatar.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
-				if (socialLogin
-						.isAccessTokenValid(Utility.SHARE_TYPE_SINA_WEIBO)) {
-					socialLogin.getUserInfoWithShareType(context,
-							Utility.SHARE_TYPE_SINA_WEIBO,
-							new UserInfoListener());
-				} else
-					socialLogin.authorize((Activity) context,
-							Utility.SHARE_TYPE_SINA_WEIBO,
-							new UserInfoListener());
-
-			}
-		});
 		initListener();
-	}
-
-	class UserInfoListener implements BaiduSocialListener {
-
-		@Override
-		public void onAuthComplete(Bundle values) {
-		}
-
-		@Override
-		public void onApiComplete(String responses) {
-			final String responseStr = responses;
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					String info = Utility.decodeUnicode(responseStr);
-					Gson json = new Gson();
-					final SinaResp resp = json.fromJson(info, SinaResp.class);
-					tvUsername.setText(resp.getUsername());
-					new Thread(new Runnable() {
-						
-						@Override
-						public void run() {
-							avatarDrawable = loadImageFromNetwork(resp.getHeadurl());
-							handler.sendEmptyMessage(0);
-						}
-					}).start();
-				}
-			});
-		}
-
-		@Override
-		public void onError(BaiduSocialException e) {
-//			final String error = e.toString();
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-				}
-			});
-		}
-	}
-
-	private Drawable loadImageFromNetwork(String imageUrl) {
-		
-		imageUrl = imageUrl.replace("/50/", "/180/");
-		
-		Drawable drawable = null;
-		try {
-			// 可以在这里通过文件名来判断，是否本地有此图片
-			drawable = Drawable.createFromStream(
-					new URL(imageUrl).openStream(), "image.jpg");
-		} catch (IOException e) {
-			Log.d("test", e.getMessage());
-		}
-		if (drawable == null) {
-			Log.d("test", "null drawable");
-		} else {
-			Log.d("test", "not null drawable");
-		}
-
-		return drawable;
 	}
 
 	/**
@@ -193,7 +191,24 @@ public class RentHouseSideMenuFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				changeCurrentView(parent, view, position);
+				changeCurrentView(parent, view, position, null);
+			}
+		});
+		imgAvatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				accessToken = AccessTokenKeeper.readAccessToken(context);
+				if (accessToken.isSessionValid()) {
+					SinaResp resp = new SinaResp();
+					resp.setName(MySharedPreferences.get_String("username", ""));
+					resp.setAvatar_large(MySharedPreferences.get_String(
+							"avatarUrl", null));
+					changeCurrentView(menu_function, null, -1, resp);
+					return;
+				}
+				Intent intent = LoginActivity
+						.createLoginIntent(RentHouseSideMenuFragment.this);
+				context.startActivity(intent);
 			}
 		});
 	}
@@ -208,7 +223,8 @@ public class RentHouseSideMenuFragment extends Fragment {
 	 * @param view
 	 * @param position
 	 */
-	public void changeCurrentView(AdapterView<?> parent, View view, int position) {
+	public void changeCurrentView(AdapterView<?> parent, View view,
+			int position, SinaResp resp) {
 		for (int i = 0; i < parent.getChildCount(); i++) {
 			((ImageView) parent.getChildAt(i).findViewById(
 					R.id.menu_function_icon)).setColorFilter(getResources()
@@ -217,18 +233,36 @@ public class RentHouseSideMenuFragment extends Fragment {
 					R.id.menu_function_content)).setTextColor(getResources()
 					.getColor(R.color.font_dark_blue));
 		}
-		ImageView icon = (ImageView) view.findViewById(R.id.menu_function_icon);
-		TextView content = (TextView) view
-				.findViewById(R.id.menu_function_content);
-		icon.setColorFilter(Color.WHITE, Mode.SRC_IN);
-		content.setTextColor(Color.WHITE);
-		if (MainActivity.mCurrentFlag == position) {
+		if (position != -1) {
+			ImageView icon = (ImageView) view
+					.findViewById(R.id.menu_function_icon);
+			TextView content = (TextView) view
+					.findViewById(R.id.menu_function_content);
+			icon.setColorFilter(Color.WHITE, Mode.SRC_IN);
+			content.setTextColor(Color.WHITE);
+		}
+		changeContentView(position, resp, this);
+	}
+
+	/**
+	 * @param position
+	 */
+	private void changeContentView(int position, SinaResp resp,
+			RentHouseSideMenuFragment rentMenu) {
+
+		if (position == -1 && MainActivity.mCurrentFlag == -1) {
+			
+		} else if (MainActivity.mCurrentFlag == position) {
 			((MainActivity) getActivity()).toggle();
 			return;
 		}
 		MainActivity.mCurrentFlag = position;
 		MainActivity menu = (MainActivity) getActivity();
 		switch (position) {
+		case -1:
+			// TODO 添加用户中心flagment
+			cur_fragment = UserCenterFragment.getInstance(sm, resp, rentMenu);
+			break;
 		case 0:
 			cur_fragment = WubaHouseListFragment.getInstance(sm);
 			break;

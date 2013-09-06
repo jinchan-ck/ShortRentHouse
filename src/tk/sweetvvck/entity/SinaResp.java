@@ -16,93 +16,62 @@ public class SinaResp {
 	 * :"50.994f3a95a784926bf5dd51a9bc2560b2.625966.1379012400.3909405914-391335"
 	 * ,"media_uid":"1621387877","hs_history":[]}
 	 */
-	
-	private String tinyurl;
-	private String birthday;
-	private String media_type;
-	private String sex; 
-	private String is_verified;
-	private String[] university_history;
-	private String[] work_history;
-	private String mainurl;
+
+	/**
+	 * {"id":1621387877,"idstr":"1621387877","class":1,"screen_name":"sweetvvck"
+	 * ,"name":"sweetvvck","province":"11","city":"5","location":"北京 朝阳区",
+	 * "description":"","url":"","profile_image_url":
+	 * "http://tp2.sinaimg.cn/1621387877/50/5665212522/1"
+	 * ,"profile_url":"u/1621387877"
+	 * ,"domain":"","weihao":"","gender":"m","followers_count"
+	 * :11,"friends_count"
+	 * :57,"statuses_count":103,"favourites_count":5,"created_at"
+	 * :"Thu Jun 28 16:01:45 +0800 2012"
+	 * ,"following":false,"allow_all_act_msg":false
+	 * ,"geo_enabled":true,"verified"
+	 * :false,"verified_type":-1,"remark":"","status"
+	 * :{"created_at":"Thu Sep 05 20:36:16 +0800 2013"
+	 * ,"id":3619269588081869,"mid"
+	 * :"3619269588081869","idstr":"3619269588081869"
+	 * ,"text":"友盟社会化组件可以让移动应用快速具备社会化分享、登录、评论、喜欢等功能，并提供实时、全面的社会化数据统计分析服务"
+	 * ,"source":
+	 * "<a href=\"http://app.weibo.com/t/feed/crXpu\" rel=\"nofollow\">友盟社会化组件</a>"
+	 * ,"favorited":false,"truncated":false,"in_reply_to_status_id":"",
+	 * "in_reply_to_user_id"
+	 * :"","in_reply_to_screen_name":"","pic_urls":[],"geo":
+	 * null,"reposts_count":
+	 * 0,"comments_count":0,"attitudes_count":0,"mlevel":0,"visible"
+	 * :{"type":0,"list_id"
+	 * :0}},"ptype":0,"allow_all_comment":true,"avatar_large"
+	 * :"http://tp2.sinaimg.cn/1621387877/180/5665212522/1"
+	 * ,"avatar_hd":"http://tp2.sinaimg.cn/1621387877/180/5665212522/1"
+	 * ,"verified_reason"
+	 * :"","follow_me":false,"online_status":0,"bi_followers_count"
+	 * :3,"lang":"zh-cn","star":0,"mbtype":0,"mbrank":0,"block_word":0}
+	 */
+
+	private int id;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	private String city;
-	private String[] hometown_location;
-	private String username;
+	private String name;
 	private String province;
-	private String social_uid;
-	private String[] hs_history;
-	private String headurl;
-	public String getHeadurl() {
-		return headurl;
-	}
-	public void setHeadurl(String headurl) {
-		this.headurl = headurl;
-	}
-	public String getTinyurl() {
-		return tinyurl;
-	}
-	public void setTinyurl(String tinyurl) {
-		this.tinyurl = tinyurl;
-	}
-	public String getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
-	public String getMedia_type() {
-		return media_type;
-	}
-	public void setMedia_type(String media_type) {
-		this.media_type = media_type;
-	}
-	public String getSex() {
-		return sex;
-	}
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-	public String getIs_verified() {
-		return is_verified;
-	}
-	public void setIs_verified(String is_verified) {
-		this.is_verified = is_verified;
-	}
-	public String[] getUniversity_history() {
-		return university_history;
-	}
-	public void setUniversity_history(String[] university_history) {
-		this.university_history = university_history;
-	}
-	public String[] getWork_history() {
-		return work_history;
-	}
-	public void setWork_history(String[] work_history) {
-		this.work_history = work_history;
-	}
-	public String getMainurl() {
-		return mainurl;
-	}
-	public void setMainurl(String mainurl) {
-		this.mainurl = mainurl;
-	}
+	private String avatar_large;
 	public String getCity() {
 		return city;
 	}
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String[] getHometown_location() {
-		return hometown_location;
+	public String getName() {
+		return name;
 	}
-	public void setHometown_location(String[] hometown_location) {
-		this.hometown_location = hometown_location;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getProvince() {
 		return province;
@@ -110,17 +79,10 @@ public class SinaResp {
 	public void setProvince(String province) {
 		this.province = province;
 	}
-	public String getSocial_uid() {
-		return social_uid;
+	public String getAvatar_large() {
+		return avatar_large;
 	}
-	public void setSocial_uid(String social_uid) {
-		this.social_uid = social_uid;
+	public void setAvatar_large(String avatar_large) {
+		this.avatar_large = avatar_large;
 	}
-	public String[] getHs_history() {
-		return hs_history;
-	}
-	public void setHs_history(String[] hs_history) {
-		this.hs_history = hs_history;
-	}
-	
 }

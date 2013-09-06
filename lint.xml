@@ -4,7 +4,12 @@
     <issue id="HandlerLeak" severity="ignore" />
     <issue id="NewApi">
         <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\RentHouseSideMenuFragment.java" />
+        <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\UserCenterFragment.java" />
     </issue>
     <issue id="SetJavaScriptEnabled" severity="ignore" />
+    <issue id="SimpleDateFormat">
+        <ignore path="src\tk\sweetvvck\shortrendhouse\activity\LoginActivity.java" />
+        <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\RentHouseSideMenuFragment.java" />
+    </issue>
     <issue id="ValidFragment" severity="ignore" />
 </lint>
