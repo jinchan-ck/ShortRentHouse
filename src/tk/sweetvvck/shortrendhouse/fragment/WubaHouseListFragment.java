@@ -18,7 +18,6 @@ public class WubaHouseListFragment extends Fragment {
 
 	public static Fragment instance;
 
-	@SuppressWarnings("unused")
 	private static SlidingMenu _sm;
 
 	public MyWebView mWebView;
@@ -50,6 +49,7 @@ public class WubaHouseListFragment extends Fragment {
 		View progressView = inflater.inflate(R.layout.progressbar, null);
 		progressbar = (LoadingCircleView) progressView.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
+		_sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		return rootView;
 	}
 

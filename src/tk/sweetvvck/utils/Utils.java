@@ -152,6 +152,9 @@ public class Utils {
 	 * @return
 	 */
 	public static Bitmap getRoundRectBitmap(Drawable drawable, float roundPx) {
+		if(drawable == null){
+			return null;
+		}
 		Bitmap bitmap = Bitmap
 				.createBitmap(
 						drawable.getIntrinsicWidth(),

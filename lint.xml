@@ -6,6 +6,9 @@
         <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\RentHouseSideMenuFragment.java" />
         <ignore path="src\tk\sweetvvck\shortrendhouse\fragment\UserCenterFragment.java" />
     </issue>
+    <issue id="Recycle">
+        <ignore path="src\tk\sweetvvck\swipeview\SwipeListViewTouchListener.java" />
+    </issue>
     <issue id="SetJavaScriptEnabled" severity="ignore" />
     <issue id="SimpleDateFormat">
         <ignore path="src\tk\sweetvvck\shortrendhouse\activity\LoginActivity.java" />

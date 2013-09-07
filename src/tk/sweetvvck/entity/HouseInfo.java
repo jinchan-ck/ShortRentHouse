@@ -1,9 +1,35 @@
 package tk.sweetvvck.entity;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-public class HouseInfo {
+public class HouseInfo implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private HashMap<String, String> images;
+	private Set<Photo> photos = new HashSet<Photo>();
+	/**
+	 * @author 程科 增加邮件Item是否被翻开属性 2013-07-31
+	 */
+	private boolean openedFlag;
+
+	public boolean isOpenedFlag() {
+		return openedFlag;
+	}
+
+	public void setOpenedFlag(boolean openedFlag) {
+		this.openedFlag = openedFlag;
+	}
+
+	public Set<Photo> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(Set<Photo> photos) {
+		this.photos = photos;
+	}
+
 	private String zone;
 	private String place;
 	private String location;

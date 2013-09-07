@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import tk.sweetvvck.customview.LoadingCircleView;
 import tk.sweetvvck.entity.HouseInfo;
 import tk.sweetvvck.net.req.PublishReq;
 import tk.sweetvvck.shortrendhouse.R;
@@ -15,11 +14,13 @@ import tk.sweetvvck.utils.AccessTokenKeeper;
 import tk.sweetvvck.utils.HttpUtils;
 import tk.sweetvvck.utils.MySharedPreferences;
 import tk.sweetvvck.utils.UploadUtils;
+import tk.sweetvvck.utils.Utils;
 import tk.sweetvvck.zonepicker.DBManager;
 import tk.sweetvvck.zonepicker.MyAdapter;
 import tk.sweetvvck.zonepicker.MyListItem;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -55,7 +56,7 @@ import com.weibo.sdk.android.Oauth2AccessToken;
 public class PublishActivity extends SlidingFragmentActivity {
 
 	private Context context;
-	private Dialog progressDialog;
+	private ProgressDialog progressDialog;
 	private DBManager dbm;
 	private SQLiteDatabase db;
 	private MyAdapter provinceAdapter;
@@ -97,27 +98,14 @@ public class PublishActivity extends SlidingFragmentActivity {
 	/** 发布到服务器的返回值 */
 	private String result;
 
-	public Dialog getProgressDialog() {
-		return progressDialog;
-	}
-
-	public LoadingCircleView getProgressbar() {
-		return progressbar;
-	}
-
-	private LoadingCircleView progressbar;
-
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
-				Toast.makeText(context, result, Toast.LENGTH_LONG)
-				.show();
+				Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 				System.out.println("result--->" + result);
-				if (progressDialog != null) {
-					progressDialog.dismiss();
-				}
-				if(result != null && result.contains("成功")){
+				Utils.dismissProgressDialog(progressDialog);
+				if (result != null && result.contains("成功")) {
 					PublishActivity.this.finish();
 				}
 				break;
@@ -136,7 +124,6 @@ public class PublishActivity extends SlidingFragmentActivity {
 		initViews();
 		actionbarInit();
 		slidingMenuInit();
-		progressDialogInit();
 	}
 
 	public void selectImage(View v) {
@@ -258,18 +245,6 @@ public class PublishActivity extends SlidingFragmentActivity {
 				});
 			}
 		});
-	}
-
-	/**
-	 * 初始化进度框
-	 */
-	private void progressDialogInit() {
-		progressDialog = new Dialog(this, R.style.myDialogTheme);
-		View progressView = getLayoutInflater().inflate(R.layout.progressbar,
-				null);
-		progressbar = (LoadingCircleView) progressView
-				.findViewById(R.id.progress_bar);
-		progressDialog.setContentView(progressView);
 	}
 
 	/**
@@ -430,16 +405,14 @@ public class PublishActivity extends SlidingFragmentActivity {
 	 */
 	private void publishData() {
 		PublishReq req = getEditData();
-		if(req == null){
+		if (req == null) {
 			return;
 		}
 		Gson json = new Gson();
 		String jso = json.toJson(req);
 		final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("bean", jso));
-		if (progressDialog != null) {
-			progressDialog.show();
-		}
+		Utils.createSimpleProgressDialog(progressDialog, context, "发布中");
 		new Thread(new Runnable() {
 
 			@Override
@@ -463,8 +436,16 @@ public class PublishActivity extends SlidingFragmentActivity {
 		String discription = etDiscription.getText().toString().trim();
 		String contact = etContact.getText().toString().trim();
 		String phoneNum = etPhoneNum.getText().toString().trim();
-		String identity = ((RadioButton) rgIdentity.getChildAt(rgIdentity
-				.getCheckedRadioButtonId() - 1)).getText().toString();
+		RadioButton radioBtn = null;
+		if (rgIdentity.getCheckedRadioButtonId() - 1 > -1
+				&& rgIdentity.getCheckedRadioButtonId() - 1 < 2) {
+			radioBtn = (RadioButton) rgIdentity.getChildAt(rgIdentity
+					.getCheckedRadioButtonId() - 1);
+		}
+		String identity = null;
+		if (radioBtn != null) {
+			identity = radioBtn.getText().toString();
+		}
 		if (contact != null && !contact.equals("")) {
 			content.setContact(contact);
 		} else {
@@ -482,6 +463,9 @@ public class PublishActivity extends SlidingFragmentActivity {
 		} else {
 			Toast.makeText(context, "房屋类型不能为空", Toast.LENGTH_SHORT).show();
 			return null;
+		}
+		if (identity == null) {
+			identity = "个人";
 		}
 		content.setIdentity(identity);
 		if (!images.isEmpty()) {
@@ -532,7 +516,8 @@ public class PublishActivity extends SlidingFragmentActivity {
 			uid = MySharedPreferences.get_String("uid", null);
 		} else {
 			uid = null;
-			Toast.makeText(context, "您还未登录，或者登陆过期，请重新登陆", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "您还未登录，或者登陆过期，请重新登陆", Toast.LENGTH_SHORT)
+					.show();
 			return null;
 		}
 		PublishReq req = new PublishReq();

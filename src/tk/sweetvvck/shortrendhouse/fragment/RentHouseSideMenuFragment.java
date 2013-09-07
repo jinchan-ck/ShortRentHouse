@@ -268,7 +268,9 @@ public class RentHouseSideMenuFragment extends Fragment {
 			break;
 		case 1:
 			cur_fragment = GanjiHouseListFragment.getInstance(sm);
-
+			break;
+		case 2:
+			cur_fragment = VVHouseListFragment.getInstance(sm);
 			break;
 		}
 		FragmentTransaction ft = menu.getSupportFragmentManager()
@@ -285,9 +287,9 @@ public class RentHouseSideMenuFragment extends Fragment {
 
 	class FunctionAdapter extends BaseAdapter {
 
-		String[] txts = { "五八同城", "赶集生活" };
+		String[] txts = { "五八同城", "赶集生活", "VV短租" };
 
-		int[] icons = { R.drawable.menu_uni, R.drawable.menu_con };
+		int[] icons = { R.drawable.menu_uni, R.drawable.menu_con, R.drawable.menu_con};
 		ViewHolder holder;
 
 		public FunctionAdapter(Context context) {

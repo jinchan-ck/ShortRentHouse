@@ -58,8 +58,6 @@ public class WebTool {
 
 	public static Drawable loadImageFromNetwork(String imageUrl) {
 
-		imageUrl = imageUrl.replace("/50/", "/180/");
-
 		Drawable drawable = null;
 		try {
 			// 可以在这里通过文件名来判断，是否本地有此图片

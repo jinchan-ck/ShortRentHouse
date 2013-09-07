@@ -76,6 +76,7 @@ public class UserCenterFragment extends Fragment {
 		progressbar = (LoadingCircleView) progressView
 				.findViewById(R.id.progress_bar);
 		progressDialog.setContentView(progressView);
+		_sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		setUserInfo();
 		imgAvatar.setOnClickListener(new OnClickListener() {
 			@Override
