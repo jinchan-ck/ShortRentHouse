@@ -9,7 +9,7 @@
     <item
         android:id="@+id/publish"
         android:orderInCategory="100"
-        android:icon="@drawable/publish"
+        android:icon="@drawable/publish_edit"
         android:showAsAction="always"
         android:title="@string/publish"/>
 

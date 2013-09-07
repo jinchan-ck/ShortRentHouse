@@ -39,7 +39,12 @@
             android:theme="@style/xmgTransparent" >
         </activity>
         <activity
-            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:name="tk.sweetvvck.shortrendhouse.activity.SelectPicActivity"
+            android:label="@string/app_name"
+            android:theme="@style/xmgTransparent" >
+        </activity>
+        <activity
+            android:windowSoftInputMode="stateHidden"
             android:name="tk.sweetvvck.shortrendhouse.activity.PublishActivity"
             android:label="@string/app_name"
             android:theme="@style/xmgTransparent" >

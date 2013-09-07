@@ -2,6 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:paddingBottom="15dp"
     android:orientation="vertical" >
 
     <ScrollView
@@ -19,12 +20,14 @@
                 android:background="@android:color/darker_gray" >
 
                 <LinearLayout
+                    android:id="@+id/ll_upload_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal" >
 
                     <ImageButton
+                        android:onClick="selectImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
@@ -269,6 +272,7 @@
                     android:textSize="16sp" />
 
                 <RadioGroup
+                    android:id="@+id/rg_identity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
@@ -287,17 +291,17 @@
                 </RadioGroup>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" >
+<!--             <LinearLayout -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:gravity="center" > -->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_publish"
-                    android:text="@string/publish" />
-            </LinearLayout>
+<!--                 <Button -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:background="@drawable/btn_publish" -->
+<!--                     android:text="@string/publish" /> -->
+<!--             </LinearLayout> -->
         </LinearLayout>
     </ScrollView>
 
