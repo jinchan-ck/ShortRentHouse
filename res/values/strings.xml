@@ -3,9 +3,37 @@
 
     <string name="app_name">V_V短租</string>
     <string name="action_settings">Settings</string>
+    <string name="publish">发布</string>
     <string name="hello_world">Hello world!</string>
     <string name="login">点击登陆</string>
     <color name="font_dark_blue">#515964</color>
     <color name="icon_dark_blue">#424c57</color>
+    
+<!--     发布界面 -->
+    <string name="zone">区　域</string>
+    <string name="zone_exam">朝阳　小营</string>
+    <string name="place">位　置</string>
+    <string name="location">地　段</string>
+    <string name="house_type">房　型</string>
+    <string name="price">价　格</string>
+    <string name="title">标　题</string>
+    <string name="discription">描　述</string>
+    <string name="contact">联系人</string>
+    <string name="phone_num">手机号</string>
+    <string name="identity">身　份</string>
+    <string name="personer">个人</string>
+    <string name="agency">中介</string>
+    
+    <!-- 房屋类型array -->
+    <string-array name="house_type">
+        <item>酒店式公寓</item>
+        <item>家庭旅馆</item>
+        <item>经济型酒店</item>
+        <item>宾馆招待所</item>
+        <item>特色客栈</item>
+        <item>星级酒店</item>
+        <item>青年旅社</item>
+    </string-array>
+
 
 </resources>

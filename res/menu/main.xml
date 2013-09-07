@@ -4,11 +4,13 @@
         android:id="@+id/actionbar_function"
         android:icon="@drawable/logout"
         android:showAsAction="always"
+        android:visible="false"
         android:title="登出"/>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/publish"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:icon="@drawable/publish"
+        android:showAsAction="always"
+        android:title="@string/publish"/>
 
 </menu>

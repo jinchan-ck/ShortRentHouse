@@ -9,6 +9,7 @@ package tk.sweetvvck.utils;
 public class TouchTool {
 
 	private int startX, startY;
+	@SuppressWarnings("unused")
 	private int endX, endY;
 	public TouchTool(int startX, int startY, int endX, int endY) {
 		super();

@@ -2,6 +2,7 @@ package tk.sweetvvck.shortrendhouse.activity;
 
 import tk.sweetvvck.shortrendhouse.R;
 import tk.sweetvvck.shortrendhouse.fragment.RentHouseSideMenuFragment;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.actionbarsherlock.view.Menu;
@@ -97,7 +98,12 @@ public class MenuActivity extends SlidingFragmentActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
-		actionBarListener.onItemClick(itemId);
+		if(actionBarListener != null)
+			actionBarListener.onItemClick(itemId);
+		if(itemId == R.id.publish){
+			Intent intent = new Intent(this, PublishActivity.class);
+			startActivity(intent);
+		}
 		return true;
 	}
 }
