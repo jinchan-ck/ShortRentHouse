@@ -72,6 +72,23 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 				Bitmap bmp = (Bitmap) args.get("bitmap");
 				iv.setImageBitmap(bmp);
 				break;
+			case 4:
+				String result = (String) msg.obj;
+				if(result != null){
+					Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
+				}else{
+					Toast.makeText(activity, "删除失败", Toast.LENGTH_LONG).show();
+				}
+				break;
+			case HouseAdapter.HANDLE_FAVORITE:
+				String message = (String) msg.obj;
+				System.out.println(message);
+				if(message != null){
+					Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+				}else{
+					Toast.makeText(activity, "收藏失败", Toast.LENGTH_LONG).show();
+				}
+				break;
 			}
 		}
 	};
@@ -178,7 +195,7 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			@Override
 			public void onDismiss(int[] reverseSortedPositions) {
 				for (int position : reverseSortedPositions) {
-					data.remove(position - 1);
+					data.remove(position);
 					mPosition -= 1;
 				}
 				adapter.notifyDataSetChanged();

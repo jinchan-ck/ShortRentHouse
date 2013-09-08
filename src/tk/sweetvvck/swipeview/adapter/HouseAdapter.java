@@ -5,12 +5,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import tk.sweetvvck.entity.HouseInfo;
 import tk.sweetvvck.entity.Photo;
 import tk.sweetvvck.shortrendhouse.R;
 import tk.sweetvvck.swipeview.SwipeListView;
+import tk.sweetvvck.utils.AccessTokenKeeper;
 import tk.sweetvvck.utils.HttpUtils;
+import tk.sweetvvck.utils.MySharedPreferences;
 import tk.sweetvvck.utils.Utils;
 import tk.sweetvvck.utils.WebTool;
 import android.app.DatePickerDialog;
@@ -30,9 +36,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.weibo.sdk.android.Oauth2AccessToken;
+
 public class HouseAdapter extends BaseAdapter {
 
+	public static final int HANDLE_FAVORITE = 5;
+
 	private List<HouseInfo> data;
+
+	public List<HouseInfo> getData() {
+		return data;
+	}
+
+	public void setData(List<HouseInfo> data) {
+		this.data = data;
+	}
+
 	private Context context;
 	Dialog dialog;
 	SwipeListView swipeListView;
@@ -49,12 +68,17 @@ public class HouseAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return data.size();
+		if (data != null)
+			return data.size();
+		return 0;
 	}
 
 	@Override
 	public HouseInfo getItem(int position) {
-		return data.get(position);
+		if (data != null)
+			return data.get(position);
+		else
+			return null;
 	}
 
 	@Override
@@ -103,8 +127,6 @@ public class HouseAdapter extends BaseAdapter {
 					.findViewById(R.id.example_row_b_action_1);
 			holder.bAction2 = (ImageButton) convertView
 					.findViewById(R.id.example_row_b_action_2);
-			holder.bAction3 = (ImageButton) convertView
-					.findViewById(R.id.example_row_b_action_3);
 			holder.bAction4 = (ImageButton) convertView
 					.findViewById(R.id.example_row_b_action_4);
 
@@ -155,7 +177,36 @@ public class HouseAdapter extends BaseAdapter {
 				int btn1_id = !star_state ? R.drawable.list_item_star_light
 						: R.drawable.list_item_star;
 				btn1.setImageDrawable(Utils.ResIDToDrawable(context, btn1_id));
-				star_state = !star_state;
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						String uid = null;
+						Oauth2AccessToken token = AccessTokenKeeper
+								.readAccessToken(context);
+						if (token.isSessionValid()) {
+							uid = MySharedPreferences.get_String("uid",
+									UUID.randomUUID() + "");
+						} else {
+
+						}
+						List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+						NameValuePair nameValuePair1 = new BasicNameValuePair(
+								"houseId", data.get(position).getId() + "");
+						NameValuePair nameValuePair2 = new BasicNameValuePair(
+								"uid", uid);
+						nameValuePairs.add(nameValuePair1);
+						nameValuePairs.add(nameValuePair2);
+						String optUrl = !star_state ? HttpUtils.FAVORITE_URL
+								: HttpUtils.REMOVE_FAVORITE_URL;
+						star_state = !star_state;
+						String result = HttpUtils.getData(optUrl,
+								nameValuePairs);
+						Message msg = new Message();
+						msg.what = HANDLE_FAVORITE;
+						msg.obj = result;
+						handler.sendMessage(msg);
+					}
+				}).start();
 			}
 		});
 
@@ -182,17 +233,26 @@ public class HouseAdapter extends BaseAdapter {
 			}
 		});
 
-		holder.bAction3.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(context, "button 3 onclick", Toast.LENGTH_SHORT)
-						.show();
-			}
-		});
 		holder.bAction4.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				swipeListView.dismiss(position + 1);
+				swipeListView.dismiss(position);
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+						NameValuePair nameValuePair = new BasicNameValuePair(
+								"houseId", getItem(position).getId() + "");
+						nameValuePairs.add(nameValuePair);
+						String result = HttpUtils.getData(
+								HttpUtils.DELETE_HOUSE_URL, nameValuePairs);
+						Message msg = new Message();
+						msg.what = 4;
+						msg.obj = result;
+						handler.sendMessage(msg);
+					}
+				}).start();
 			}
 		});
 		return convertView;
@@ -207,7 +267,6 @@ public class HouseAdapter extends BaseAdapter {
 
 		ImageButton bAction1;
 		ImageButton bAction2;
-		ImageButton bAction3;
 		ImageButton bAction4;
 	}
 }

@@ -18,9 +18,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 
 public class HttpUtils {
-	public static final String BASE_URL = "http://192.168.1.103:8080/vvsrh/";
+	public static final String BASE_URL = "http://vvrent.duapp.com/";
 	public static final String PUBLISH_URL = BASE_URL +  "vvsrh.action";
 	public static final String GET_HOUSES_URL = BASE_URL + "getVVHouses.action";
+	public static final String GET_MYPUBLISHHOUSES_URL = BASE_URL + "getMyPublish.action";
+	public static final String DELETE_HOUSE_URL = BASE_URL + "deleteHouse.action";
+	public static final String FAVORITE_URL = BASE_URL + "favorite.action";
+	public static final String REMOVE_FAVORITE_URL = BASE_URL + "removeFavorite.action";
+	public static final String GET_FAVORITE_URL = BASE_URL + "getFavorite.action";
 
 	public static String getData(String url, List<NameValuePair> nameValuePairs) {
 		if (nameValuePairs == null) {

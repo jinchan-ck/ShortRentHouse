@@ -29,7 +29,14 @@ public class HouseInfo implements Serializable{
 	public void setPhotos(Set<Photo> photos) {
 		this.photos = photos;
 	}
+	private int id;
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 	private String zone;
 	private String place;
 	private String location;
