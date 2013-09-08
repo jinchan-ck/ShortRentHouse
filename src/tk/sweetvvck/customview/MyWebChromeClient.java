@@ -2,6 +2,7 @@ package tk.sweetvvck.customview;
 
 import tk.sweetvvck.shortrendhouse.activity.HouseDetailActivity;
 import tk.sweetvvck.shortrendhouse.activity.MainActivity;
+import tk.sweetvvck.shortrendhouse.activity.VVHouseDetailActivity;
 import android.content.Context;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -55,6 +56,10 @@ public class MyWebChromeClient extends WebChromeClient {
 		} else if(context instanceof HouseDetailActivity){
 			if(((HouseDetailActivity)context).getProgressbar() != null){
 				((HouseDetailActivity)context).getProgressbar().setProgress(paramInt);
+			}
+		} else if(context instanceof VVHouseDetailActivity){
+			if(((VVHouseDetailActivity)context).getProgressbar() != null){
+				((VVHouseDetailActivity)context).getProgressbar().setProgress(paramInt);
 			}
 		}
 	}

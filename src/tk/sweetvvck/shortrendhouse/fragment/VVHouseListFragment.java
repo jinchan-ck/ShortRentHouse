@@ -21,6 +21,9 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -99,6 +102,18 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 		// 搜索条
 		MySharedPreferences.init_SP_Instance(getActivity(), "MailListState");
 		cur_item_index = MySharedPreferences.get_Int("cur_item_index", 1);
+		swipeListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(getActivity(),
+						VVHouseDetailActivity.class);
+				HouseInfo houseInfo = data.get(position);
+				intent.putExtra("houseInfo", houseInfo);
+				startActivity(intent);
+			}
+		});
 		reload();
 	}
 
@@ -176,7 +191,7 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 				Intent intent = new Intent(getActivity(),
 						VVHouseDetailActivity.class);
 				HouseInfo houseInfo = data.get(position);
-				intent.putExtra("itemdata", houseInfo);
+				intent.putExtra("houseInfo", houseInfo);
 				startActivity(intent);
 			}
 

@@ -10,6 +10,10 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+/**
+ * 自定义圆形带进度的进度条
+ * @author 程科
+ */
 public class LoadingCircleView extends View {  
   
     private final  Paint paint;    

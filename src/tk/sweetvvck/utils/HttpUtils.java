@@ -26,6 +26,7 @@ public class HttpUtils {
 	public static final String FAVORITE_URL = BASE_URL + "favorite.action";
 	public static final String REMOVE_FAVORITE_URL = BASE_URL + "removeFavorite.action";
 	public static final String GET_FAVORITE_URL = BASE_URL + "getFavorite.action";
+	public static final String SHOW_HOUSE_DETAIL = BASE_URL + "showDetail.action";
 
 	public static String getData(String url, List<NameValuePair> nameValuePairs) {
 		if (nameValuePairs == null) {

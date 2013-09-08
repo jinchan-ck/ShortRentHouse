@@ -49,6 +49,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.weibo.sdk.android.Oauth2AccessToken;
@@ -107,6 +108,8 @@ public class PublishActivity extends SlidingFragmentActivity {
 				Utils.dismissProgressDialog(progressDialog);
 				if (result != null && result.contains("成功")) {
 					PublishActivity.this.finish();
+				}else{
+					Toast.makeText(context, "发布失败", Toast.LENGTH_LONG).show();
 				}
 				break;
 			default:
@@ -143,7 +146,8 @@ public class PublishActivity extends SlidingFragmentActivity {
 			imageView.setLayoutParams(new LayoutParams(250, 200));
 			llUploadImage.addView(imageView);
 			String imgName = picPath.substring(picPath.lastIndexOf("/"));
-			images.put(imgName, UploadUtils.bitmaptoString(bm));
+			String fix = imgName.substring(imgName.lastIndexOf("."));
+			images.put(imgName, UploadUtils.bitmaptoString(bm, fix));
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -409,10 +413,22 @@ public class PublishActivity extends SlidingFragmentActivity {
 			return;
 		}
 		Gson json = new Gson();
-		String jso = json.toJson(req);
+		String jso = json.toJson(req, new TypeToken<PublishReq>(){}.getType());
+		
+		StringBuffer sb = new StringBuffer();
+		
+		for(String key : images.keySet()){
+			System.out.println("img-------》" + images.get(key));
+		}
+		
+//		String imgJson = json.toJson(images, new TypeToken<HashMap<String, String>>(){}.getType());
+		
+//		System.out.println("image_________>" + imgJson);
+		
+		System.out.println(jso);
 		final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("bean", jso));
-		Utils.createSimpleProgressDialog(progressDialog, context, "发布中");
+		progressDialog = Utils.createSimpleProgressDialog(progressDialog, context, "发布中");
 		new Thread(new Runnable() {
 
 			@Override

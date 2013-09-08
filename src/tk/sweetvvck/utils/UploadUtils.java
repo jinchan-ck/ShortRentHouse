@@ -23,12 +23,15 @@ public class UploadUtils {
 		return bitmap;
 	}
 
-	public static String bitmaptoString(Bitmap bitmap) {
-
+	public static String bitmaptoString(Bitmap bitmap, String fix) {
+		CompressFormat format = CompressFormat.JPEG;
+		if(fix != null){
+			format = fix.equalsIgnoreCase("png") ? CompressFormat.PNG : CompressFormat.JPEG;
+		}
 		// 将Bitmap转换成字符串
 		String string = null;
 		ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-		bitmap.compress(CompressFormat.PNG, 100, bStream);
+		bitmap.compress(format, 100, bStream);
 		byte[] bytes = bStream.toByteArray();
 		string = Base64.encodeToString(bytes, Base64.DEFAULT);
 		return string;
@@ -57,7 +60,7 @@ public class UploadUtils {
 		BitmapFactory.decodeFile(filePath, options);
 
 		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, 480, 800);
+		options.inSampleSize = calculateInSampleSize(options, 320, 480);
 
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;

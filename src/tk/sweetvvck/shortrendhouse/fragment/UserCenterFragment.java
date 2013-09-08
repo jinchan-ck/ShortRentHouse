@@ -12,6 +12,7 @@ import tk.sweetvvck.shortrendhouse.R;
 import tk.sweetvvck.shortrendhouse.activity.LoginActivity;
 import tk.sweetvvck.shortrendhouse.activity.MenuActivity;
 import tk.sweetvvck.shortrendhouse.activity.MenuActivity.ActionBarListener;
+import tk.sweetvvck.shortrendhouse.activity.VVHouseDetailActivity;
 import tk.sweetvvck.shortrendhouse.adapter.UserCenterAdapter;
 import tk.sweetvvck.shortrendhouse.adapter.UserCenterAdapter.OnTabSelectListener;
 import tk.sweetvvck.shortrendhouse.adapter.UserCenterAdapter.ViewHolder;
@@ -166,14 +167,16 @@ public class UserCenterFragment extends Fragment {
 			public void onClickFrontView(int position) {
 				swipeListView.closeOpenedItems();
 				Log.d("swipe", String.format("onClickFrontView %d", position));
-				// 列表item点击事件
-				// Intent intent = new Intent(getActivity(),
-				// MailListDetailActivity.class);
-				// MailListItem itemData = data.get(position - 1);
-				// intent.putExtra("itemdata", itemData);
-				// Log.d("xmg", "itemData.getIcon()=" + itemData.getIcon());
-				//
-				// startActivity(intent);
+				Intent intent = new Intent(getActivity(),
+						VVHouseDetailActivity.class);
+				HouseInfo houseInfo = null;
+				if (swipeListView != null && swipeListView.getAdapter() != null
+						&& swipeListView.getAdapter().getItem(position) != null) {
+					houseInfo = (HouseInfo) swipeListView
+							.getAdapter().getItem(position);
+				}
+				intent.putExtra("houseInfo", houseInfo);
+				startActivity(intent);
 			}
 
 			/**
@@ -397,17 +400,17 @@ public class UserCenterFragment extends Fragment {
 				break;
 			case 4:
 				String result = (String) msg.obj;
-				if(result != null){
+				if (result != null) {
 					Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
-				}else{
+				} else {
 					Toast.makeText(activity, "删除失败", Toast.LENGTH_LONG).show();
 				}
 				break;
 			case HouseAdapter.HANDLE_FAVORITE:
 				String message = (String) msg.obj;
-				if(message != null){
+				if (message != null) {
 					Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
-				}else{
+				} else {
 					Toast.makeText(activity, "收藏失败", Toast.LENGTH_LONG).show();
 				}
 				break;

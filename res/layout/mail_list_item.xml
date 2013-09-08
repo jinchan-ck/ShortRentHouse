@@ -32,14 +32,14 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/share" />
 
-            <ImageButton
-                android:id="@+id/example_row_b_action_4"
-                style="@style/ListButtonAction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:src="@drawable/list_item_delete" />
+<!--             <ImageButton -->
+<!--                 android:id="@+id/example_row_b_action_4" -->
+<!--                 style="@style/ListButtonAction" -->
+<!--                 android:layout_width="wrap_content" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:layout_weight="1" -->
+<!--                 android:background="@android:color/transparent" -->
+<!--                 android:src="@drawable/list_item_delete" /> -->
         </LinearLayout>
 
         <!-- 列表前面板的item元素 -->

@@ -1,16 +1,14 @@
 package tk.sweetvvck.shortrendhouse.activity;
 
-import java.io.IOException;
-
 import tk.sweetvvck.customview.LoadingCircleView;
 import tk.sweetvvck.customview.MyWebView;
-import tk.sweetvvck.external.External;
+import tk.sweetvvck.entity.HouseInfo;
 import tk.sweetvvck.shortrendhouse.R;
+import tk.sweetvvck.utils.HttpUtils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -41,20 +39,7 @@ public class VVHouseDetailActivity extends SlidingFragmentActivity {
 		return webview;
 	}
 
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 0:
-				/** 使用loaddatawithbaseurl解决中文乱码 */
-				webview.loadDataWithBaseURL("", data, "text/html", "utf-8", "");
-				break;
-			default:
-				break;
-			}
-		}
-	};
 	private String url;
-	private String data = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,23 +66,12 @@ public class VVHouseDetailActivity extends SlidingFragmentActivity {
 		webview = (MyWebView) this.findViewById(R.id.house_list_webview);
 
 		Intent intent = getIntent();
-		String channel = intent.getStringExtra("channel");
-		url = intent.getStringExtra("url");
-		if (channel != null && channel.equalsIgnoreCase("wuba")) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						data = External.remove58(url);
-						handler.sendEmptyMessage(0);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}).start();
-		}else if(channel != null && channel.equalsIgnoreCase("ganji")){
-			webview.loadUrl(url);
+		HouseInfo houseInfo = (HouseInfo) intent.getSerializableExtra("houseInfo");
+		
+		if(houseInfo != null){
+			url = HttpUtils.SHOW_HOUSE_DETAIL + "?houseId=" + houseInfo.getId();
 		}
+		webview.loadUrl(url);
 	}
 
 	/**

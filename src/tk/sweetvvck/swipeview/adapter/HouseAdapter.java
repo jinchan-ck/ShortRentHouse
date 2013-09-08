@@ -1,7 +1,6 @@
 package tk.sweetvvck.swipeview.adapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -19,9 +18,9 @@ import tk.sweetvvck.utils.HttpUtils;
 import tk.sweetvvck.utils.MySharedPreferences;
 import tk.sweetvvck.utils.Utils;
 import tk.sweetvvck.utils.WebTool;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -30,11 +29,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.weibo.sdk.android.Oauth2AccessToken;
 
@@ -127,8 +124,8 @@ public class HouseAdapter extends BaseAdapter {
 					.findViewById(R.id.example_row_b_action_1);
 			holder.bAction2 = (ImageButton) convertView
 					.findViewById(R.id.example_row_b_action_2);
-			holder.bAction4 = (ImageButton) convertView
-					.findViewById(R.id.example_row_b_action_4);
+			// holder.bAction4 = (ImageButton) convertView
+			// .findViewById(R.id.example_row_b_action_4);
 
 			convertView.setTag(holder);
 		} else {
@@ -213,48 +210,43 @@ public class HouseAdapter extends BaseAdapter {
 		holder.bAction2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(System.currentTimeMillis());
-				DatePickerDialog dp = new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								StringBuffer sb = new StringBuffer();
-								sb.append(String.format("%d-%02d-%02d", year,
-										monthOfYear + 1, dayOfMonth));
-								Toast.makeText(context, sb, Toast.LENGTH_SHORT)
-										.show();
-							}
-						}, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
-								.get(Calendar.DAY_OF_MONTH));
-				dp.show();
+				HouseInfo houseInfo = getItem(position);
+				String content = null;
+				if(houseInfo != null){
+					content = "号外号外：" + houseInfo.getTitle() + "\r\n详情：" + houseInfo.getDiscription();
+				}
+				Intent intentItem = new Intent(Intent.ACTION_SEND); // 分享发送的数据类型
+				intentItem.setType("text/plain"); // 分享发送的数据类型
+				intentItem.putExtra(Intent.EXTRA_SUBJECT, "subject"); // 分享的主题
+				intentItem.putExtra(Intent.EXTRA_TEXT, content); // 分享的内容
+				intentItem.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// 这个也许是分享列表的背景吧
+				context.startActivity(Intent.createChooser(
+						intentItem, "分享"));// 目标应用选择对话框的标题
 			}
 		});
 
-		holder.bAction4.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				swipeListView.dismiss(position);
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-						NameValuePair nameValuePair = new BasicNameValuePair(
-								"houseId", getItem(position).getId() + "");
-						nameValuePairs.add(nameValuePair);
-						String result = HttpUtils.getData(
-								HttpUtils.DELETE_HOUSE_URL, nameValuePairs);
-						Message msg = new Message();
-						msg.what = 4;
-						msg.obj = result;
-						handler.sendMessage(msg);
-					}
-				}).start();
-			}
-		});
+		// holder.bAction4.setOnClickListener(new View.OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// swipeListView.dismiss(position);
+		// new Thread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		// NameValuePair nameValuePair = new BasicNameValuePair(
+		// "houseId", getItem(position).getId() + "");
+		// nameValuePairs.add(nameValuePair);
+		// String result = HttpUtils.getData(
+		// HttpUtils.DELETE_HOUSE_URL, nameValuePairs);
+		// Message msg = new Message();
+		// msg.what = 4;
+		// msg.obj = result;
+		// handler.sendMessage(msg);
+		// }
+		// }).start();
+		// }
+		// });
 		return convertView;
 	}
 
@@ -267,6 +259,6 @@ public class HouseAdapter extends BaseAdapter {
 
 		ImageButton bAction1;
 		ImageButton bAction2;
-		ImageButton bAction4;
+		// ImageButton bAction4;
 	}
 }

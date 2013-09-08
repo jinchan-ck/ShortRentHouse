@@ -2,6 +2,7 @@ package tk.sweetvvck.customview;
 
 import tk.sweetvvck.shortrendhouse.activity.HouseDetailActivity;
 import tk.sweetvvck.shortrendhouse.activity.MainActivity;
+import tk.sweetvvck.shortrendhouse.activity.VVHouseDetailActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,9 @@ public class MyWebViewClient extends WebViewClient {
 		} else if(context instanceof HouseDetailActivity){
 			if(((HouseDetailActivity)context).getProgressDialog() != null && ((HouseDetailActivity)context).getProgressDialog().isShowing())
 				((HouseDetailActivity)context).getProgressDialog().dismiss();
+		} else if(context instanceof VVHouseDetailActivity){
+			if(((VVHouseDetailActivity)context).getProgressDialog() != null && ((VVHouseDetailActivity)context).getProgressDialog().isShowing())
+				((VVHouseDetailActivity)context).getProgressDialog().dismiss();
 		}
 	}
 
@@ -38,6 +42,9 @@ public class MyWebViewClient extends WebViewClient {
 		}else if(context instanceof HouseDetailActivity){
 			if(((HouseDetailActivity)context).getProgressDialog() != null && !((HouseDetailActivity)context).getProgressDialog().isShowing())
 				((HouseDetailActivity)context).getProgressDialog().show();
+		}else if(context instanceof VVHouseDetailActivity){
+			if(((VVHouseDetailActivity)context).getProgressDialog() != null && !((VVHouseDetailActivity)context).getProgressDialog().isShowing())
+				((VVHouseDetailActivity)context).getProgressDialog().show();
 		}
 	}
 
