@@ -25,7 +25,7 @@ import tk.sweetvvck.utils.FileOptService;
 import tk.sweetvvck.utils.Utils;
 import tk.sweetvvck.utils.WebTool;
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -41,7 +41,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,9 +61,9 @@ public class UserCenterFragment extends Fragment {
 
 	private static SlidingMenu _sm;
 
-	private Dialog progressDialog;
+	private ProgressDialog progressDialog;
 
-	public Dialog getProgressDialog() {
+	public ProgressDialog getProgressDialog() {
 		return progressDialog;
 	}
 
@@ -315,37 +314,7 @@ public class UserCenterFragment extends Fragment {
 		lvBackground.addHeaderView(itemHead1);
 		imgAvatar = (ImageView) itemHead1.findViewById(R.id.avatar);
 		tvUsername = (TextView) itemHead1.findViewById(R.id.tv_username);
-		progressDialog = new Dialog(activity, R.style.myDialogTheme);
-		View progressView = inflater.inflate(R.layout.progressbar, null);
-		progressbar = (LoadingCircleView) progressView
-				.findViewById(R.id.progress_bar);
-		progressDialog.setContentView(progressView);
-	}
-
-	class BackgroundAdapter extends BaseAdapter {
-
-		@Override
-		public int getCount() {
-			return 1;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return position;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ImageView img = new ImageView(activity);
-			img.setBackground(getResources()
-					.getDrawable(R.drawable.ic_launcher));
-			return img;
-		}
+		progressDialog = Utils.createSimpleProgressDialog(progressDialog, activity, "loading...");
 	}
 
 	private Drawable avatarDrawable;
@@ -363,9 +332,6 @@ public class UserCenterFragment extends Fragment {
 				imgAvatar.setImageBitmap(bmp);
 				_rentMenu.getImgAvatar().setImageBitmap(bmp);
 				_rentMenu.getTvUsername().setText(_resp.getName());
-				if (progressDialog != null) {
-					progressDialog.dismiss();
-				}
 				break;
 
 			case 1:

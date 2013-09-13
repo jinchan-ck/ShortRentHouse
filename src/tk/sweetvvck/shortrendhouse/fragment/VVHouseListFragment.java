@@ -5,6 +5,7 @@ import java.util.List;
 
 import tk.sweetvvck.entity.HouseInfo;
 import tk.sweetvvck.shortrendhouse.R;
+import tk.sweetvvck.shortrendhouse.activity.MenuActivity;
 import tk.sweetvvck.shortrendhouse.activity.VVHouseDetailActivity;
 import tk.sweetvvck.swipeview.BaseSwipeListViewListener;
 import tk.sweetvvck.swipeview.SwipeListView;
@@ -21,15 +22,17 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jeremyfeinstein.slidingmenu.lib.CustomViewAbove;
+import com.jeremyfeinstein.slidingmenu.lib.CustomViewAbove.CustomInterceptTouchEventListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class VVHouseListFragment extends HouseListBaseFragment {
@@ -39,7 +42,6 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 	private SwipeListView swipeListView;
 
 	/** 用于标记是否要拦截全局右滑操作 ， 当mPosition == position和初始化时，设为不拦截，其他情况为拦截 */
-	@SuppressWarnings("unused")
 	private boolean notInterceptFlag = true;
 	/** 用于记录当前触摸的列表的Item的位置 */
 	private int mPosition;
@@ -77,18 +79,18 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 				break;
 			case 4:
 				String result = (String) msg.obj;
-				if(result != null){
+				if (result != null) {
 					Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
-				}else{
+				} else {
 					Toast.makeText(activity, "删除失败", Toast.LENGTH_LONG).show();
 				}
 				break;
 			case HouseAdapter.HANDLE_FAVORITE:
 				String message = (String) msg.obj;
 				System.out.println(message);
-				if(message != null){
+				if (message != null) {
 					Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
-				}else{
+				} else {
 					Toast.makeText(activity, "收藏失败", Toast.LENGTH_LONG).show();
 				}
 				break;
@@ -96,24 +98,21 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 		}
 	};
 
+	private View mSearchBar = null;
+	/* package */EditText mSearchBar_EditText;
+
 	@Override
 	public void initViews(LayoutInflater inflater) {
 		swipeListView = (SwipeListView) rootView.findViewById(R.id.list);
 		// 搜索条
+		mSearchBar = inflater.inflate(R.layout.search_bar, null);
+		swipeListView.addHeaderView(mSearchBar);
+		mSearchBar_EditText = (EditText) mSearchBar
+				.findViewById(R.id.list_search);
+		swipeListView = (SwipeListView) rootView.findViewById(R.id.list);
+		// 搜索条
 		MySharedPreferences.init_SP_Instance(getActivity(), "MailListState");
 		cur_item_index = MySharedPreferences.get_Int("cur_item_index", 1);
-		swipeListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent intent = new Intent(getActivity(),
-						VVHouseDetailActivity.class);
-				HouseInfo houseInfo = data.get(position);
-				intent.putExtra("houseInfo", houseInfo);
-				startActivity(intent);
-			}
-		});
 		reload();
 	}
 
@@ -132,10 +131,10 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			 */
 			@Override
 			public void onDown(int downPosition) {
-				if (mPosition == downPosition) {
+				if (mPosition == downPosition - 1) {
 					notInterceptFlag = true;
 				}
-				mPosition = downPosition;
+				mPosition = downPosition - 1;
 			}
 
 			/**
@@ -146,7 +145,7 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			@Override
 			public void onOpened(int position, boolean toRight) {
 				swipeListView.closeOtherItems();
-				data.get(position).setOpenedFlag(true);
+				data.get(position - 1).setOpenedFlag(true);
 				notInterceptFlag = false;
 			}
 
@@ -156,7 +155,7 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 					position -= 1;
 				}
 				if (position > 0)
-					data.get(position).setOpenedFlag(false);
+					data.get(position - 1).setOpenedFlag(false);
 				notInterceptFlag = true;
 			}
 
@@ -172,14 +171,11 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			@Override
 			public void onStartOpen(int position, int action, boolean right) {
 				swipeListView.closeOtherItems();
-				Log.d("swipe", String.format("onStartOpen %d - action %d",
-						position, action));
 				// 这里是滑动事件监听 打开后面板2130837652
 			}
 
 			@Override
 			public void onStartClose(int position, boolean right) {
-				Log.d("swipe", String.format("onStartClose %d", position));
 				// 这里是滑动事件监听 关闭后面板
 			}
 
@@ -200,9 +196,8 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			 */
 			@Override
 			public void onClickBackView(int position) {
-				Log.d("swipe", String.format("onClickBackView %d", position));
 				// 后面板整体点击
-				if (mPosition == position) {
+				if (mPosition == position - 1) {
 					notInterceptFlag = false;
 				}
 			}
@@ -210,7 +205,7 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 			@Override
 			public void onDismiss(int[] reverseSortedPositions) {
 				for (int position : reverseSortedPositions) {
-					data.remove(position);
+					data.remove(position - 1);
 					mPosition -= 1;
 				}
 				adapter.notifyDataSetChanged();
@@ -218,72 +213,63 @@ public class VVHouseListFragment extends HouseListBaseFragment {
 
 			@Override
 			public void onScroll(int firstVisibleItem) {
-				cur_item_index = firstVisibleItem;
 			}
 
 		});
 	}
 
 	public void initActionBarListener() {
-		// ((MenuActivity) getActivity())
-		// .setActionBarListener(new MenuActivity.ActionBarListener() {
-		// @Override
-		// public void onItemClick(int MenuItemID) {
-		// switch (MenuItemID) {
-		// // 刷新按钮点击事件
-		// case R.id.action_refresh:
-		// Toast.makeText(getActivity(), "main refresh",
-		// Toast.LENGTH_SHORT).show();
-		// MyDBHelper mMyDBHelper = MyDBHelper
-		// .getInstant(getActivity());
-		// // for (int i = 0; i < 1; i++) {
-		// mMyDBHelper.insertDatabase();
-		// // }
-		// cur_item_index = 1;
-		// MySharedPreferences.init_SP_Instance(getActivity(),
-		// "MailListState");
-		// MySharedPreferences.put_Int("cur_item_index",
-		// cur_item_index);
-		// bandData4View();
-		// break;
-		// case R.id.action_write:
-		// Intent intent = new Intent(getActivity(),
-		// EditMailActivity.class);
-		// getActivity().startActivity(intent);
-		// break;
-		// default:
-		// break;
-		// }
-		// }
-		// });
+		((MenuActivity) getActivity())
+				.setActionBarListener(new MenuActivity.ActionBarListener() {
+					@Override
+					public void onItemClick(int MenuItemID) {
+						switch (MenuItemID) {
+						// 刷新按钮点击事件
+						case R.id.actionbar_function:
+							Toast.makeText(getActivity(), "VV refresh",
+									Toast.LENGTH_SHORT).show();
+							cur_item_index = 1;
+							MySharedPreferences.init_SP_Instance(getActivity(),
+									"MailListState");
+							MySharedPreferences.put_Int("cur_item_index",
+									cur_item_index);
+							bandData4View();
+							break;
+						// case R.id.action_write:
+						// Intent intent = new Intent(getActivity(),
+						// EditMailActivity.class);
+						// getActivity().startActivity(intent);
+						// break;
+						default:
+							break;
+						}
+					}
+				});
 
 		/**
 		 * 注册这个监听器用于通知slidingmenu的CustomViewAbove是否拦截当前触摸事件，不向子View（
 		 * SwipeListView）传递
 		 */
-//		_sm.setCustomInterceptTouchEventListener(new CustomInterceptTouchEventListener() {
-//
-//			@Override
-//			public boolean interceptOrNot(CustomViewAbove customViewAbove,
-//					MotionEvent ev) {
-//				Log.d("swipe", String.format("onTouch %d", mPosition));
-//				if (mPosition < 0)
-//					return true;
-//				if (notInterceptFlag && data != null && !data.isEmpty()
-//						&& data.get(mPosition).isOpenedFlag()) {
-//					return false;
-//				} else {
-//					return true;
-//				}
-//			}
-//
-//			@Override
-//			public void onDrag() {
-//				swipeListView.closeOpenedItems();
-//			}
-//		});
-		if(_sm != null)
-			_sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		_sm.setCustomInterceptTouchEventListener(new CustomInterceptTouchEventListener() {
+
+			@Override
+			public boolean interceptOrNot(CustomViewAbove customViewAbove,
+					MotionEvent ev) {
+				if (mPosition < 0)
+					return true;
+				if (notInterceptFlag && data != null && !data.isEmpty()
+						&& data.get(mPosition).isOpenedFlag()) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+
+			@Override
+			public void onDrag() {
+				swipeListView.closeOpenedItems();
+			}
+		});
 		initListener();
 	}
 

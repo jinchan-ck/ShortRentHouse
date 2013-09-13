@@ -4,7 +4,6 @@
         android:id="@+id/actionbar_function"
         android:icon="@drawable/logout"
         android:showAsAction="always"
-        android:visible="false"
         android:title="登出"/>
     <item
         android:id="@+id/publish"

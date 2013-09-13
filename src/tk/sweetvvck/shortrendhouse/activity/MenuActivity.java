@@ -52,20 +52,21 @@ public class MenuActivity extends SlidingFragmentActivity {
 				// TODO
 				switch (mCurrentFlag) {
 				case -1:
-					function.setVisible(true);
+					function.setIcon(R.drawable.logout);
 					break;
 				case 0:
 					// TODO 58同城界面的Actionbar
-					function.setVisible(false);
+					function.setIcon(R.drawable.actionbar_refresh);
 					break;
 
 				case 1:
 					// TODO 赶集网界面的Actionbar
-					function.setVisible(false);
+					function.setIcon(R.drawable.actionbar_refresh);
 					break;
 
 				case 2:
-					// 日历界面的actionbar
+					// TODO VV短租界面的Actionbar
+					function.setIcon(R.drawable.actionbar_refresh);
 					break;
 
 				default:

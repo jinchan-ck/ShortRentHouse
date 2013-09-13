@@ -3,6 +3,7 @@ package tk.sweetvvck.customview;
 import tk.sweetvvck.shortrendhouse.activity.HouseDetailActivity;
 import tk.sweetvvck.shortrendhouse.activity.MainActivity;
 import tk.sweetvvck.shortrendhouse.activity.VVHouseDetailActivity;
+import tk.sweetvvck.utils.HttpUtils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,7 +51,17 @@ public class MyWebViewClient extends WebViewClient {
 
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		if(url.contains("http://www.3g.ganji.com/bj_fang10/") && url.substring(url.indexOf("http://www.3g.ganji.com/bj_fang10/")).length() > 1 && !url.contains("www.3g.ganji.com/bj_fang10/?page=")){
+		if(url.contains(HttpUtils.BASE_URL + "bj_fang10/")){
+			url = url.replace("http://vvrent.duapp.com/bj_fang10/", HttpUtils.GET_GANJI_HOUSE_LIST);
+		}
+		
+		if(url.contains("http://www.3g.ganji.com/bj_fang10/")){
+			url = url.replace("http://www.3g.ganji.com/bj_fang10/", HttpUtils.GET_GANJI_HOUSE_LIST);
+		}
+		if(url.contains(HttpUtils.GET_GANJI_HOUSE_LIST) && url.substring(url.indexOf(HttpUtils.GET_GANJI_HOUSE_LIST)).length() > 1){
+			url = url.replace(HttpUtils.GET_GANJI_HOUSE_LIST, HttpUtils.GET_GANJI_HOUSE_LIST + "?projection=");
+		}
+		if(url.contains(HttpUtils.GET_GANJI_HOUSE_LIST) && url.substring(url.indexOf(HttpUtils.GET_GANJI_HOUSE_LIST)).length() > 1 && !url.contains("?page=")){
 			Intent intent = new Intent(context, HouseDetailActivity.class);
 			intent.putExtra("url", url);
 			intent.putExtra("channel", "ganji");

@@ -73,6 +73,7 @@ public class External {
 		data = data.replace("fangico bangbang net-online", "hidden");// 隐藏在线聊天功能
 		data = data.replace("banner_down", "hidden");
 		data = data.replace("adZhiNeng", "hidden");
+		data = data.replace("dl_nav", "hidden");
 		data = data.replace("58同城", "<strong><font color=red>VV短租</font></strong>");
 		return data;
 	}

@@ -213,9 +213,6 @@ public class RentHouseSideMenuFragment extends Fragment {
 		});
 	}
 
-	Fragment last_fragment;
-	List<Integer> already_opened = new ArrayList<Integer>();
-
 	/**
 	 * 根据position改变当先的展示
 	 * 
@@ -243,7 +240,8 @@ public class RentHouseSideMenuFragment extends Fragment {
 		}
 		changeContentView(position, resp, this);
 	}
-
+	Fragment last_fragment;
+	List<Integer> already_opened = new ArrayList<Integer>();
 	/**
 	 * @param position
 	 */
@@ -251,7 +249,7 @@ public class RentHouseSideMenuFragment extends Fragment {
 			RentHouseSideMenuFragment rentMenu) {
 
 		if (position == -1 && MainActivity.mCurrentFlag == -1) {
-			
+
 		} else if (MainActivity.mCurrentFlag == position) {
 			((MainActivity) getActivity()).toggle();
 			return;
@@ -275,8 +273,32 @@ public class RentHouseSideMenuFragment extends Fragment {
 		}
 		FragmentTransaction ft = menu.getSupportFragmentManager()
 				.beginTransaction();
-		ft.replace(R.id.main_layout, cur_fragment);
+		if (already_opened.contains(position) || position == 0) {
+			ft.hide(last_fragment);
+			ft.show(cur_fragment);
+			switch (position) {
+			case 0:
+				((WubaHouseListFragment) cur_fragment).initActionBarListener();
+				break;
+			case 1:
+				((GanjiHouseListFragment) cur_fragment).initActionBarListener();
+				break;
+			case 2:
+				((VVHouseListFragment) cur_fragment).initActionBarListener();
+				break;
+			}
+		} else {
+			ft.add(R.id.main_layout, cur_fragment);
+			if (last_fragment != null)
+				ft.hide(last_fragment);
+		}
 		ft.commit();
+		// 如果已经加入过这个position，就不要在重复添加了。
+		if (!already_opened.contains(position)) {
+			// 将已经打开的fragment加入到list中。判断是否打开过
+			already_opened.add(position);
+		}
+		last_fragment = cur_fragment;
 		menu.getSlidingMenu().showContent();
 	}
 
@@ -289,7 +311,8 @@ public class RentHouseSideMenuFragment extends Fragment {
 
 		String[] txts = { "五八同城", "赶集生活", "VV短租" };
 
-		int[] icons = { R.drawable.menu_uni, R.drawable.menu_con, R.drawable.menu_con};
+		int[] icons = { R.drawable.menu_uni, R.drawable.menu_con,
+				R.drawable.menu_con };
 		ViewHolder holder;
 
 		public FunctionAdapter(Context context) {
