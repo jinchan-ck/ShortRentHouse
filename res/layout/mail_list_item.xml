@@ -64,7 +64,7 @@
                 android:layout_alignTop="@id/example_row_iv_image"
                 android:layout_toRightOf="@id/example_row_iv_image"
                 android:includeFontPadding="false"
-                android:text="@string/abs__action_bar_home_description" />
+                android:text="@string/action_settings" />
 
             <TextView
                 android:id="@+id/example_row_tv_title"
@@ -74,7 +74,7 @@
                 android:layout_alignLeft="@id/example_row_tv_name"
                 android:layout_below="@id/example_row_tv_name"
                 android:includeFontPadding="false"
-                android:text="@string/abs__action_bar_up_description" />
+                android:text="@string/action_settings" />
 
             <TextView
                 android:id="@+id/example_row_tv_message"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/example_row_tv_name"
-                android:text="@string/abs__action_mode_done" />
+                android:text="@string/action_settings" />
 
             <TextView
                 android:id="@+id/tv_conversation_num"
