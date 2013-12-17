@@ -8,3 +8,5 @@ ShortRendHouse/bin/res/*
 *.class
 *.dex
 *.apk
+/bin
+/gen
